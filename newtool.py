@@ -32,7 +32,7 @@ for index, row in input_data.iterrows():
     # Column that has the usernames to put in the code
     to_switch = row['USERNAME'].upper()
     #Write to file
-    for a_row in ccl_code:
+    for a_row in ccl_activate_code:
         # REPLACE SWAPME123 with the username in each row of the code slab
         new_row = a_row.replace('SWAPME123', to_switch)
         f = open(outputfilename, "a")
@@ -40,7 +40,7 @@ for index, row in input_data.iterrows():
 f.close()
 
 # CCL Code
-ccl_code = [
+ccl_activate_code = [
 '; USER RE-ACTIVATION SCRIPT',
 'update into prsnl p',
 'set p.end_effective_dt_tm = cnvtdatetime("31-DEC-2100")',
@@ -126,7 +126,10 @@ f.close()
 
 # Create csv for uploading to content manager
 #region
-df = pd.read_excel(r'INPUT_TEMPLATES\Personnel_template.xlsx', header=[1], dtype= 'str')
+# df = pd.read_excel(r'INPUT_TEMPLATES\Personnel_template.xlsx', header=[1], dtype= 'str')
+header_row = ['*Last Name', '*First Name', 'Middle Name', 'Username', 'External Id', 'External Id Alias Pool', 'Name Full Formatted', 'Title', 'Suffix', 'Position', 'Begin Date+Time', '*End Date+Time', 'Physician Ind', 'SSN', 'SSN Pool', 'Birthdate', 'Sex', 'VIP', 'Active Ind', 'Primary Assigned Location', 'Email', '*Prsnl Alias Type', '*Prsnl Alias', '*Prsnl Alias Pool', 'Prsnl Alias Active Ind', 'Prsnl_Alias_End_Dt', '*Org Name', 'Org Confid Level', 'Org_End_Dt', '*Address Type', '*Address Type Seq', 'Address Street 1', 'Address Street 2', 'Address Street 3', 'Address Street 4', 'City', 'County', 'State or Prov', 'Country', 'Zip Code', 'Contact', 'Comment', 'District Health UK', 'Primary Care UK', 'Address_Delete_Ind', 'Org Address Reltn Ind', 'Org Addr Name', 'Org Addr Type', 'Org Addr Sequence', '*Phone Type', '*Phone Type Seq', 'Phone Number', 'Phone Extension', 'Phone Format', 'Phone Description', 'Phone Contact', 'Phone Call Instruction', 'Phone_Delete_Ind', 'Org Phone Reln Ind', 'Org Phone Name', 'Org Phone Type', 'Org Phone Seq', '*Location Type', '*Location Name', 'Location_Delete_Ind', '*Org Group Type', '*Org Group Name', 'Org_Group_Delete_Ind', '*Prsnl Group Type', '*Prsnl Group Name', '*Prsnl Group Class', 'Prsnl_Group_Delete_Ind', '*Clinical Service Display', 'Clinical Service Default', 'Clinical Service Org Name', 'Clin_Serv_Delete_Ind']
+df_cm = pd.DataFrame(data=[header_row], columns=header_row)
+
 input_data = pd.read_excel(path, sheet_name= 'DATA', dtype= 'str' )
 
 end_date = r"30/12/2100"
@@ -139,7 +142,9 @@ act_ind = '1'
 org_g_type = 'SECURITY'
 org_g_name = 'Western Health'
 
-row_number = 0
+
+#Content Manager Dataframe
+row_number = 1
 for index, row in input_data.iterrows():
     # Column that has the usernames to put in the code
     a_user = row['USERNAME'].upper()
@@ -160,21 +165,20 @@ for index, row in input_data.iterrows():
     if a_position == 'Medical Officer P2':
         physician_ind = '1'
     # Edit Sheet
-    df.loc[row_number,'Username'] = a_user
-    df.loc[row_number,'External Id'] = a_extid
-    df.loc[row_number,'External Id Alias Pool'] = alias_pool
-    df.loc[row_number,'*Last Name'] = a_lname
-    df.loc[row_number,'*First Name'] = a_fname
-    df.loc[row_number,'Name Full Formatted'] = a_fullname
-    df.loc[row_number,'Position'] = a_position
-    df.loc[row_number,'Begin Date+Time'] = begin_date
-    df.loc[row_number,'*End Date+Time'] = end_date
-    df.loc[row_number,'Physician Ind'] = physician_ind
-    df.loc[row_number,'Active Ind'] = act_ind
-    df.loc[row_number,'*Org Group Type'] = org_g_type
-    df.loc[row_number,'*Org Group Name'] = org_g_name
+    df_cm.loc[row_number,'Username'] = a_user
+    df_cm.loc[row_number,'External Id'] = a_extid
+    df_cm.loc[row_number,'External Id Alias Pool'] = alias_pool
+    df_cm.loc[row_number,'*Last Name'] = a_lname
+    df_cm.loc[row_number,'*First Name'] = a_fname
+    df_cm.loc[row_number,'Name Full Formatted'] = a_fullname
+    df_cm.loc[row_number,'Position'] = a_position
+    df_cm.loc[row_number,'Begin Date+Time'] = begin_date
+    df_cm.loc[row_number,'*End Date+Time'] = end_date
+    df_cm.loc[row_number,'Physician Ind'] = physician_ind
+    df_cm.loc[row_number,'Active Ind'] = act_ind
+    df_cm.loc[row_number,'*Org Group Type'] = org_g_type
+    df_cm.loc[row_number,'*Org Group Name'] = org_g_name
     row_number+=1
-
 
 outfilp = r'C:\Users\\'
 outfilp = outfilp + username + '\\'
@@ -185,8 +189,5 @@ datetime_str = datetime_str.replace(':', '-')
 outputfilename = outfilp + datetime_str + outputfilename + '.csv'
 outputfilename = str(outputfilename)
 # Add a blank row
-df.loc[-1] = df.columns.values
-df.index = df.index + 1  # shifting index
-df = df.sort_index()  # sorting by index
-df.to_csv(outputfilename, index=False)
+df_cm.to_csv(outputfilename, index=False)
 #endregion
