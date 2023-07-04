@@ -1,33 +1,14 @@
-# Username is used for finding your folder eg. c/users/whittlj2
-username = 'whittlj2'
-
-# Path for input data
-path = 'input.xlsx'
-
-# Output filetype for CCL and authview code
-filetype = '.txt'
-
 #import libraries
 import os
 import datetime
 import pandas as pd
 
-# Create Activate Code file
-#region
-outfilp = r'C:\Users\\'
-outfilp = outfilp + username + '\\'
-outputfilename = '-ACTIVATE-CODE'
-datetime_str = str(datetime.datetime.now())
-datetime_str = datetime_str.replace('.', '_')
-datetime_str = datetime_str.replace(':', '-')
-outputfilename = outfilp + datetime_str + outputfilename + filetype
-outputfilename = str(outputfilename)
 
 
 # READ EXCEL FILE
-input_data = pd.read_excel(path, dtype= 'str' )
+input_data = pd.read_excel(input.xlsx, dtype= 'str' )
 
-# WRITE CODE TO TXT FILE
+# creat
 for index, row in input_data.iterrows():
     # Column that has the usernames to put in the code
     to_switch = row['USERNAME'].upper()
