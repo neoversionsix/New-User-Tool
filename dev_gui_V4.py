@@ -127,8 +127,6 @@ def create_df_cm(input_data):
     df_cm = pd.DataFrame(data_dicts, columns=header_row)  # create dataframe from the list of dictionaries
     return df_cm
 
-
-
 def save_as_csv():
     global input_data_global, button_close
     if input_data_global is not None:
@@ -153,14 +151,13 @@ def save_as_csv():
     else:
         print("No input data to save")
 
-
 # Tkinter root window
 root = tk.Tk()
 root.state('zoomed')  # Maximize the window
 #root.geometry("400x800")  # size of the window
 
 # Button widget
-button_open = tk.Button(root, text="Open Excel File")
+button_open = tk.Button(root, text="Open Excel File of Users to Create")
 button_open.grid(row=0, column=0, sticky='w', pady=10)
 
 button_save = tk.Button(root, text="Save Content Manager file to Upload as CSV", command=save_as_csv)
@@ -177,7 +174,6 @@ code_cred_text.grid(row=0, column=2, sticky='nsew')  # Fill the grid cell
 root.grid_rowconfigure(0, weight=1)  # Row 0 expands with window
 root.grid_columnconfigure(1, weight=1)  # Column 1 (code_text) expands with window
 root.grid_columnconfigure(2, weight=1)  # Column 2 (code_cred_text) expands with window
-
 
 # global variable to hold the last read data
 input_data_global = None
@@ -210,5 +206,4 @@ def generate_code():
                     code_cred_text.insert(tk.END, new_row_2 + '\n')
 
 button_open['command'] = generate_code
-
 root.mainloop()
