@@ -88,6 +88,8 @@ def create_df_cm(input_data):
     act_ind = '1'
     org_g_type = 'SECURITY'
     org_g_name = 'Western Health'
+    PRSNL_GROUP_NAME = 'ED Primed Views'
+    PRSNL_GROUP_TYPE = 'ED Primed Views'
     
     # iterate over input data
     data_dicts = []
@@ -105,7 +107,22 @@ def create_df_cm(input_data):
         physician_ind = '0'
         if a_position in ['Medical Officer', 'Medical Officer P1', 'Medical Officer P2']:
             physician_ind = '1'
-        data_dict.update({'Username': a_user, 'External Id': a_extid, 'External Id Alias Pool': alias_pool, '*Last Name': a_lname, '*First Name': a_fname, 'Name Full Formatted': a_fullname, 'Position': a_position, 'Begin Date+Time': begin_date, '*End Date+Time': end_date, 'Physician Ind': physician_ind, 'Active Ind': act_ind, '*Org Group Type': org_g_type, '*Org Group Name': org_g_name})
+        data_dict.update({
+            'Username': a_user,
+            'External Id': a_extid,
+            'External Id Alias Pool': alias_pool,
+            '*Last Name': a_lname, '*First Name': a_fname,
+            'Name Full Formatted': a_fullname,
+            'Position': a_position,
+            'Begin Date+Time': begin_date,
+            '*End Date+Time': end_date,
+            'Physician Ind': physician_ind,
+            'Active Ind': act_ind,
+            '*Org Group Type': org_g_type,
+            '*Org Group Name': org_g_name,
+            '*Prsnl Group Type': PRSNL_GROUP_TYPE,
+            '*Prsnl Group Name': PRSNL_GROUP_NAME
+            })
         data_dicts.append(data_dict)
     df_cm = pd.DataFrame(data_dicts, columns=header_row)  # create dataframe from the list of dictionaries
     return df_cm
