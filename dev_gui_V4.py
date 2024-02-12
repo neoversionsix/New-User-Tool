@@ -156,24 +156,42 @@ root = tk.Tk()
 root.state('zoomed')  # Maximize the window
 #root.geometry("400x800")  # size of the window
 
+# Label widget for instructions
+instructions_text = """Please follow the steps below:
+1. Click on the button: 'Open Excel File of Users to Create'. 
+    
+2. Select the Excel file containing the user data with headings: USERNAME, FIRST, LAST, CREDENTIAL, POSITION.
+3. Run The auto generated 'User Re-Activation Script' (All the Update code in top Box). 
+    This 'activates' any inactive users that are already in the system and in the excel file.
+
+3. Click on the 'Save Content Manager CSV file' button.
+
+4. Upload the file you just saved with the erner Content Manager Tool
+
+5. Run The auto generated 'Credential Move/Directory Ind' Update Scripts (All the Update code in BOTTOM Box). 
+    This adds credentials to the accounts and changes the directory_ind to 1 (this means it's an 'AD' Synched Account).
+"""
+
+instructions_label = tk.Label(root, text=instructions_text, justify='left')
+instructions_label.grid(row=0, column=0, sticky='w', pady=10, padx=10, columnspan=2)
+
 # Button widget
 button_open = tk.Button(root, text="Open Excel File of Users to Create")
-button_open.grid(row=0, column=0, sticky='w', pady=10)
+button_open.grid(row=1, column=0, sticky='w', pady=10, padx=10)
 
-button_save = tk.Button(root, text="Save Content Manager file to Upload as CSV", command=save_as_csv)
-button_save.grid(row=1, column=0, sticky='w', pady=10)
+button_save = tk.Button(root, text="Save Content Manager CSV file", command=save_as_csv)
+button_save.grid(row=2, column=0, sticky='w', pady=10, padx=10)
 
 # Text widget for re-activation script
 code_text = ScrolledText(root, wrap='word')  # Wrap text at WORD level
-code_text.grid(row=0, column=1, sticky='nsew')  # Fill the grid cell
+code_text.grid(row=1, column=1, sticky='nsew', rowspan=2)  # Fill the grid cell
 
 # Text widget for credential move script
 code_cred_text = ScrolledText(root, wrap='word')  # Wrap text at WORD level
-code_cred_text.grid(row=0, column=2, sticky='nsew')  # Fill the grid cell
+code_cred_text.grid(row=2, column=1, sticky='nsew', rowspan=2)  # Fill the grid cell
 
-root.grid_rowconfigure(0, weight=1)  # Row 0 expands with window
+root.grid_rowconfigure(1, weight=1)  # Row 1 expands with window
 root.grid_columnconfigure(1, weight=1)  # Column 1 (code_text) expands with window
-root.grid_columnconfigure(2, weight=1)  # Column 2 (code_cred_text) expands with window
 
 # global variable to hold the last read data
 input_data_global = None
