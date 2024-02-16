@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import filedialog, Text
 from tkinter.scrolledtext import ScrolledText
 import tkinter.messagebox as messagebox
-
+import pyperclip
 
 # CCL Code
 ccl_code = [
@@ -151,6 +151,33 @@ def save_as_csv():
     else:
         print("No input data to save")
 
+def copy_credential_box_code():
+    code_to_copy = """
+SELECT
+    C.BEG_EFFECTIVE_DT_TM "YYYY-MM-DD HH:SS"
+    , P.USERNAME
+    , CREATED = P.BEG_EFFECTIVE_DT_TM "YYYY-MM-DD HH:SS"
+    , C.ACTIVE_IND
+    , C_ACTIVE_STATUS_DISP = UAR_GET_CODE_DISPLAY(C.ACTIVE_STATUS_CD)
+    , C_CREDENTIAL_DISP = UAR_GET_CODE_DISPLAY(C.CREDENTIAL_CD)
+    , C.CREDENTIAL_ID
+    , C_CREDENTIAL_TYPE_DISP = UAR_GET_CODE_DISPLAY(C.CREDENTIAL_TYPE_CD)
+
+FROM
+    PRSNL   P
+    , (FULL JOIN CREDENTIAL C ON (P.PERSON_ID = C.PRSNL_ID))
+
+WHERE P.USERNAME = "CREDENTIALBOX"
+
+ORDER BY
+    C.BEG_EFFECTIVE_DT_TM
+
+WITH MAXREC = 20000, NOCOUNTER, SEPARATOR=" ", FORMAT, TIME = 30
+    """
+    pyperclip.copy(code_to_copy)
+    messagebox.showinfo("Success", "Credential Box Checker code copied to clipboard!")
+
+
 # Tkinter root window
 root = tk.Tk()
 root.state('zoomed')  # Maximize the window
@@ -181,6 +208,9 @@ button_open.grid(row=1, column=0, sticky='w', pady=10, padx=10)
 
 button_save = tk.Button(root, text="Save Content Manager CSV file", command=save_as_csv)
 button_save.grid(row=2, column=0, sticky='w', pady=10, padx=10)
+
+button_copy_code = tk.Button(root, text="Copy Credential Box Checker Code to Clipboard", command=copy_credential_box_code)
+button_copy_code.grid(row=3, column=0, sticky='w', pady=10, padx=10)
 
 # Text widget for re-activation script
 code_text = ScrolledText(root, wrap='word')  # Wrap text at WORD level
